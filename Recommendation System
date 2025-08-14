@@ -1,0 +1,42 @@
+# Sample movie dataset
+movies = {
+    'The Matrix': ['action', 'sci-fi'],
+    'John Wick': ['action', 'thriller'],
+    'Toy Story': ['animation', 'comedy', 'family'],
+    'The Lion King': ['animation', 'adventure', 'drama'],
+    'Avengers: Endgame': ['action', 'adventure', 'sci-fi'],
+    'Inception': ['action', 'adventure', 'sci-fi'],
+    'Finding Nemo': ['animation', 'adventure', 'comedy'],
+    'The Dark Knight': ['action', 'crime', 'drama'],
+    'Titanic': ['drama', 'romance'],
+    'Shrek': ['animation', 'comedy', 'fantasy']
+}
+
+def recommend_simple(input_title):
+    if input_title not in movies:
+        return f"Movie '{input_title}' not found in the database."
+
+    input_genres = set(movies[input_title])
+    similarity_scores = {}
+
+    for title, genres in movies.items():
+        if title == input_title:
+            continue
+        common_genres = input_genres.intersection(genres)
+        similarity_scores[title] = len(common_genres)
+
+    # Sort by number of common genres
+    sorted_movies = sorted(similarity_scores.items(), key=lambda x: x[1], reverse=True)
+
+    return [movie for movie, score in sorted_movies if score > 0]
+
+# Example use
+user_movie = input("Enter a movie you like: ")
+results = recommend_simple(user_movie)
+
+print("\nRecommended movies for you:")
+if isinstance(results, list) and results:
+    for r in results:
+        print("-", r)
+else:
+    print(results)
